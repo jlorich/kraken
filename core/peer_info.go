@@ -18,6 +18,7 @@ import "sort"
 // PeerInfo defines peer metadata scoped to a torrent.
 type PeerInfo struct {
 	PeerID   PeerID `json:"peer_id"`
+	Zone     string `json:"zone"`
 	IP       string `json:"ip"`
 	Port     int    `json:"port"`
 	Origin   bool   `json:"origin"`
@@ -27,6 +28,7 @@ type PeerInfo struct {
 // NewPeerInfo creates a new PeerInfo.
 func NewPeerInfo(
 	peerID PeerID,
+	zone string,
 	ip string,
 	port int,
 	origin bool,
@@ -43,7 +45,7 @@ func NewPeerInfo(
 
 // PeerInfoFromContext derives PeerInfo from a PeerContext.
 func PeerInfoFromContext(pctx PeerContext, complete bool) *PeerInfo {
-	return NewPeerInfo(pctx.PeerID, pctx.IP, pctx.Port, pctx.Origin, complete)
+	return NewPeerInfo(pctx.PeerID, pctx.Zone, pctx.IP, pctx.Port, pctx.Origin, complete)
 }
 
 // PeerInfos groups PeerInfo structs for sorting.
