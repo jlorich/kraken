@@ -36,31 +36,33 @@ func serializePeer(p *core.PeerInfo) string {
 	if p.Complete {
 		completeBit = 1
 	}
-	return fmt.Sprintf("%s:%s:%d:%d", p.PeerID.String(), p.IP, p.Port, completeBit)
+	return fmt.Sprintf("%s:%s:%s:%d:%d", p.PeerID.String(), p.Zone, p.IP, p.Port, completeBit)
 }
 
 type peerIdentity struct {
 	peerID core.PeerID
+	zone   string
 	ip     string
 	port   int
 }
 
 func deserializePeer(s string) (id peerIdentity, complete bool, err error) {
 	parts := strings.Split(s, ":")
-	if len(parts) != 4 {
-		return id, false, fmt.Errorf("invalid peer encoding: expected 'pid:ip:port:complete'")
+	if len(parts) != 5 {
+		return id, false, fmt.Errorf("invalid peer encoding: expected 'pid:zone:ip:port:complete'")
 	}
 	peerID, err := core.NewPeerID(parts[0])
 	if err != nil {
 		return id, false, fmt.Errorf("parse peer id: %s", err)
 	}
-	ip := parts[1]
-	port, err := strconv.Atoi(parts[2])
+	zone := parts[1]
+	ip := parts[2]
+	port, err := strconv.Atoi(parts[3])
 	if err != nil {
 		return id, false, fmt.Errorf("parse port: %s", err)
 	}
-	id = peerIdentity{peerID, ip, port}
-	complete = parts[3] == "1"
+	id = peerIdentity{peerID, zone, ip, port}
+	complete = parts[4] == "1"
 	return id, complete, nil
 }
 
@@ -189,7 +191,7 @@ func (s *RedisStore) GetPeers(h core.InfoHash, n int) ([]*core.PeerInfo, error) 
 
 	var peers []*core.PeerInfo
 	for id, complete := range selected {
-		p := core.NewPeerInfo(id.peerID, id.ip, id.port, false, complete)
+		p := core.NewPeerInfo(id.peerID, id.zone, id.ip, id.port, false, complete)
 		peers = append(peers, p)
 	}
 	return peers, nil

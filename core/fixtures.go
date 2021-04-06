@@ -76,12 +76,12 @@ func PeerIDFixture() PeerID {
 
 // PeerInfoFixture returns a randomly generated PeerInfo.
 func PeerInfoFixture() *PeerInfo {
-	return NewPeerInfo(PeerIDFixture(), randutil.IP(), randutil.Port(), false, false)
+	return NewPeerInfo(PeerIDFixture(), "Default", randutil.IP(), randutil.Port(), false, false)
 }
 
 // OriginPeerInfoFixture returns a randomly generated PeerInfo for an origin.
 func OriginPeerInfoFixture() *PeerInfo {
-	return NewPeerInfo(PeerIDFixture(), randutil.IP(), randutil.Port(), true, true)
+	return NewPeerInfo(PeerIDFixture(), "Origin", randutil.IP(), randutil.Port(), true, true)
 }
 
 // MetaInfoFixture returns a randomly generated MetaInfo.

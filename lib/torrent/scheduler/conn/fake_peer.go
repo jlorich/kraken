@@ -22,6 +22,7 @@ type FakePeer struct {
 
 	id   core.PeerID
 	ip   string
+	zone string
 	port int
 
 	msgTimeout time.Duration
@@ -44,6 +45,7 @@ func NewFakePeer() (*FakePeer, error) {
 	p := &FakePeer{
 		listener:   l,
 		id:         core.PeerIDFixture(),
+		zone:       "TestZone",
 		ip:         ip,
 		port:       port,
 		msgTimeout: 5 * time.Second,
@@ -67,7 +69,7 @@ func (p *FakePeer) Addr() string {
 
 // PeerInfo returns the peers' PeerInfo.
 func (p *FakePeer) PeerInfo() *core.PeerInfo {
-	return core.NewPeerInfo(p.id, p.ip, p.port, false, false)
+	return core.NewPeerInfo(p.id, p.zone, p.ip, p.port, false, false)
 }
 
 // Close shuts down the peer.
